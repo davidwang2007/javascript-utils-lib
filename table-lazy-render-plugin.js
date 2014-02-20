@@ -74,6 +74,7 @@
     LazyRenderTable.prototype.reset = function(){
         this.data.length = 0;
         this.rowsAdded.forEach(function(jRow){jRow.remove();});//delete all added rows
+        this.rowsAdded.length = 0;
         this.dataCursor = 0;
         this.currentRow = this.jTable.find('tr').eq(this.config.start);
         return this;
@@ -140,10 +141,10 @@
 			});
             return this;
         },
-		startLoading: function(){
-			this.trigger('start-loading');
-			return this;
-		}
+	startLoading: function(){
+		this.trigger('start-loading');
+		return this;
+	}
     });
 
     define && define(function(){
