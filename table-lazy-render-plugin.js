@@ -47,7 +47,7 @@
 
         this.jTable = jTable;
         jTable.data('lazy-render',this);
-        jTable.start = _delegate(this.start,this);
+        jTable.on('start-loading',_delegate(this.start,this));
         this.config = config;
 
 
@@ -135,9 +135,15 @@
 
     $.fn.extend({
         lazyRenderTable: function(config){
-            LazyRenderTable(this,config);
+			this.each(function(){
+				LazyRenderTable($(this),config);
+			});
             return this;
-        }
+        },
+		startLoading: function(){
+			this.trigger('start-loading');
+			return this;
+		}
     });
 
     define && define(function(){
