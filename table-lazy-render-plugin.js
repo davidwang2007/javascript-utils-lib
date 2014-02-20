@@ -47,7 +47,7 @@
 
         this.jTable = jTable;
         jTable.data('lazy-render',this);
-        jTable.start = this.start;
+        jTable.start = _delegate(this.start,this);
         this.config = config;
 
 
