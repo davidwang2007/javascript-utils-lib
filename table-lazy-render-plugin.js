@@ -3,6 +3,8 @@
  * WHEN YOU SCROLL TO THE TABLE BOTTOM, THE NEXT TABLE ROW DATA BLOCK RENDERED
  * USAGE:
  *   LazyRenderTable(jTable,config).start()
+ *   
+ * 注意针对导出excel的时候table表头中有td前划行的，注意设置正确的ss:Index属性
  * @author David Wang
  * @email davidwang2006@outlook.com
  * @date 2014-2-20 23:01:11
@@ -27,6 +29,7 @@
      *    statisticsCb: fn, [*] //用于统计
      *    emptyRowGenerator: fn, [*] //无数据时回调的
      *    onceRenderCount: Number, [*] //一次渲染多少行
+     *    dataPreFilter: func, [*]//数据刚由ajax返回时，预处理器 data = dataPreFilter(data);
      *    
      *    //或者再配置下面一个属性用于处理大数据集
      *    secondsLimit: xxx,
@@ -117,6 +120,7 @@
         var render = this;
         $.post(config.url,(typeof config.paramsGenerator == 'function' ? config.paramsGenerator() : config.paramsGenerator),function(data){
         	$.hideLoading && $.hideLoading();
+        	data = config.dataPreFilter ? config.dataPreFilter(data) : data;
             render.data = data;
             
             LargeArrayExecutor(data,{
@@ -294,20 +298,21 @@
      * 		download: 'xxx'//下载文件名
      * 		sheetName: '花名册名字'
      * }
+     * @jTable 为不使用render的时候 
      */
-    function Excel(render,config){
+    function Excel(render,config,jTable){
     	if(!(this instanceof Excel))
-    		return new Excel(render,config);
+    		return new Excel(render,config,jTable);
     	config = config || {};
     	config.download = config.download || '下载.xls';
     	config.sheetName = config.sheetName || '未命名花名册';
     	
     	this.config = config;
-    	this.render = render;
-    	this.jTable = render.jTable;
+    	this.render = render || {jTable:jTable,dataCursor:0,data:[]};
+    	this.jTable = this.render.jTable;
     	
     	this.columnCount = this.jTable.find('tr:last td').length;
-    	this.rowCount = this.jTable.find('tr.scroll-show').length + render.data.length;
+    	this.rowCount = this.jTable.find(jTable ? 'tr' : 'tr.scroll-show').length + this.render.data.length;
     	
     	
     	this.blobArray = new IoArray();//存储字符串
@@ -325,7 +330,7 @@
     Excel.prototype.BODY_STYLE = {
     		id:'s67',
     		content: '<Style ss:ID="s67">'
-    				+ '<Font ss:FontName="微软雅黑" x:Family="Swiss" ss:Size="13"/>'
+    				+ '<Font ss:FontName="微软雅黑" x:Family="Swiss" ss:Size="11"/>'
     				+'</Style>'
     };
     Excel.prototype.DEFAULT_STYLE = {
@@ -407,7 +412,7 @@
     };
     
     Excel.prototype._appendTableRows = function(){
-    	//先添加已经有的
+    	//先添加已经有的 这个时候一定要注意如果td跨行了 那么少td的地方要设置ss:Index属性
     	var excel = this;
     	this.jTable.find(this.config.sheetRowGenerator ? 'tr.scroll-show': 'tr').each(function(){
     		var jTr = $(this);
@@ -450,17 +455,20 @@
     	if(jTr.each/*判断 是不是jQuery包装的*/){
     		jTr.each(function(){
     			arr.push('\n<Row ss:AutoFitHeight="1">\n');
-    			$(this).find('td').each(function(){
+    			$(this).find('td').each(function(i){
     				var txt = $(this).text();
     				var colspan = $(this).attr('colspan') || 1;
     				var rowspan = $(this).attr('rowspan') || 1;
     				colspan = parseInt(colspan) - 1;
     				rowspan = parseInt(rowspan) - 1;
+    				var ssIndex = parseInt($(this).attr('ss-index') || 0);
     				arr.push('<Cell ss:StyleID="'+style.id+'"'+/*colspan*/' ss:MergeAcross="'+colspan+'"'
     						+/*rowspan*/' ss:MergeDown="' +rowspan+'"'
+    						+ (ssIndex ? (' ss:Index="'+ssIndex+'"') : '')
     						+'>');
     				arr.push('<Data ss:Type="'+(isNaN(txt) ? 'String' : 'Number')+'">'+txt+'</Data>');
     				arr.push('</Cell>');
+    				console.log('ssIndex = ',ssIndex);
     			});
     			arr.push('\n</Row>\n');
     		});
@@ -506,6 +514,11 @@
     }
     
     Excel.prototype.URL_DELETED_QUEUE = [];//object url 待回收队列
+    
+    $.extend({
+    	Excel: Excel
+    });
+    
     window.addEventListener('unload',function(){
     	Excel.prototype.URL_DELETED_QUEUE.forEach(function(url){
     		console.log('回收',url);
