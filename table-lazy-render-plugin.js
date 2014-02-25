@@ -120,7 +120,9 @@
         var render = this;
         $.post(config.url,(typeof config.paramsGenerator == 'function' ? config.paramsGenerator() : config.paramsGenerator),function(data){
         	$.hideLoading && $.hideLoading();
+        	console.debug('get ' + data.length+' datas');
         	data = config.dataPreFilter ? config.dataPreFilter(data) : data;
+        	config.dataPreFilter && console.debug('after filter length of data is ' + data.length);
             render.data = data;
             
             LargeArrayExecutor(data,{
@@ -215,7 +217,7 @@
             return new LargeArrayExecutor(array,config);
         config = config || {};
         config.secondsLimit = config.secondsLimit || 1;//最少1秒
-        config.partialExecutor = config.partialExecutor || function(){return {};};
+        config.partialExecutor = config.partialExecutor;
         config.doneCallback = config.doneCallback || $.noop;
 
         this.array = array;
@@ -241,6 +243,9 @@
         //console.log('will run '+count+' times');
         //再算出每段要算多少个
         var partialCount = Math.floor(this.array.length/count) || ((count = this.array.length) && 1);//如果每段处理0个的话，则只要分成1段
+        
+        //console.log('分成了'+count+'个时间段,每段执行'+partialCount+'个');
+        
         //console.log('each time handle ',partialCount+' elements');
         //console.log('now will run '+count+' times');
         //针对每一段执行partialExecutor
@@ -254,6 +259,8 @@
                         //此处调用partialExecutor
                         for(var j = 0; j < partialCount; j++){
                             self.sum = self.config.partialExecutor(self.array[index*partialCount + j],self.sum);
+                            //console.log('累加第'+(index*partialCount + j));
+                            self.dataCursor = index*partialCount + j + 1;
                         }
                         cb();
                     },index && self.MIN_DURATION);
@@ -262,6 +269,10 @@
         }
         //console.time('iterator');
         this.serials(fns,function(){
+        	//把剩余的给sum掉
+        	for(var i = self.dataCursor; i< self.array.length; i++){
+        		self.sum = self.config.partialExecutor(self.array[i],self.sum);
+        	}
         	//console.log('doneCallback',self.sum);
             config.doneCallback(self.sum,self.array.length);
             //console.timeEnd('iterator');
