@@ -120,7 +120,7 @@
         var render = this;
         $.post(config.url,(typeof config.paramsGenerator == 'function' ? config.paramsGenerator() : config.paramsGenerator),function(data){
         	$.hideLoading && $.hideLoading();
-        	console.debug('get ' + data.length+' datas');
+        	//console.debug('get ' + data.length+' datas');
         	data = config.dataPreFilter ? config.dataPreFilter(data) : data;
         	config.dataPreFilter && console.debug('after filter length of data is ' + data.length);
             render.data = data;
@@ -162,7 +162,7 @@
     LazyRenderTable.prototype._judgeContinueNeeded = function(){
         var render = this;
         var jTable = this.jTable;
-        if(render.dataCursor + 1 < render.data.length/*还有数据没有渲染完毕*/
+        if(render.dataCursor < render.data.length/*还有数据没有渲染完毕*/
             && (jTable.offset().top + jTable.height() < $(document).scrollTop() + $(window).height()) /*并且表格的最后一行可视*/){
             render._next();
         }
@@ -434,8 +434,8 @@
     	var render = this.render;
     	//如果有sheetRowGenerator的话 直接操作数据
     	if(this.config.sheetRowGenerator){
-    		render.data.forEach(function(d){
-    			excel.blobArray.push(excel._createExcelRowFromTr(d,excel.BODY_STYLE,false));
+    		render.data.forEach(function(d,i){
+    			excel.blobArray.push(excel._createExcelRowFromTr(d,excel.BODY_STYLE,false,i));
     		});
     	}else
 	    	for(var i = render.dataCursor; i< render.data.length; i++){
@@ -458,7 +458,7 @@
      * @param needRemoved
      * @returns {Excel}
      */
-    Excel.prototype._createExcelRowFromTr = function(jTr/*或者是某行的数据*/,style,needRemoved/*考虑到由data生成时，使用后要remove掉*/){
+    Excel.prototype._createExcelRowFromTr = function(jTr/*或者是某行的数据*/,style,needRemoved/*考虑到由data生成时，使用后要remove掉*/,index){
     	//此处需要优化效率 不能采用生成tr的办法  而应直接操作data 但这样还是会有一个问题 即在data render的td中如果存在跨行 就不好操作了
     	//暂不考虑跨行问题
     	var arr = [];
@@ -485,7 +485,7 @@
     		});
     	}else{//考虑到使用直接使用data的情况
     		arr.push('\n<Row ss:AutoFitHeight="1">\n');
-    		this.config.sheetRowGenerator(jTr).forEach(function(txt){
+    		this.config.sheetRowGenerator(jTr,index).forEach(function(txt){
     			arr.push('<Cell ss:StyleID="'+style.id+'"'+/*colspan*/' ss:MergeAcross="'+0+'"'
 						+/*rowspan*/' ss:MergeDown="' +0+'"'
 						+'>');

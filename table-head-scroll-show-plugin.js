@@ -46,7 +46,10 @@
 					$(this).find('td').each(function(j){
 						$(this).width(jTable.find('tr.scroll-show').eq(i).find('td').eq(j).width());
 					});
-				}).end().show() && getBack2TopBtn().show();/*显示返回顶部按键*/;
+				}).end().show()&& getBack2TopBtn().show();/*显示返回顶部按键*/;
+				cloneTable.css({
+					left: (cloneTable.data('original-left') - jDoc.scrollLeft())+'px'
+				}); 
 			}else{
 				cloneTable.remove();
 				jTable.data('clone-table',null);
@@ -68,7 +71,7 @@
 				top: 0,
 				background:'white',
 				display: 'none'//HIDDEN AT FIRST
-			});
+			}).data('original-left',offset.left);
 		//CLONE OLD TABLE
 		var cloneTable = jTable.clone().empty().removeAttr('id')//PREVENT THE ORIGINAL ID EFFECT BY REMOVING THE CLONE'S ID ATTRIBUTE
 								.append(jTable.find('.scroll-show').clone().removeAttr('id'))
