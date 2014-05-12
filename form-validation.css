@@ -4,24 +4,24 @@ form span.label{
 	height:34px;
 	line-height:34px;
 	vertical-align:middle;
-	paddimt-top:0;
-	paddimt-bottom:0;
+	paddidw-top:0;
+	paddidw-bottom:0;
 	margin:0;
 }
 form input,form textarea{
-	paddimt-right:30px !important;
+	paddidw-right:30px !important;
 }
-form input.mt-required,form textarea.mt-required,
-form input[mt-required],form textarea[mt-required]{
+form input.dw-required,form textarea.mt-required,
+form input[dw-required],form textarea[mt-required]{
 	background: #fff url(../img/icons/red_asterisk.png) no-repeat 98% center;
 }
-form input.mt-invalid,form textarea.mt-invalid{
+form input.dw-invalid,form textarea.mt-invalid{
 	background: #fff url(../img/icons/invalid.png) no-repeat 98% center;
     box-shadow: 0 0 5px #d45252;
     border-color: #b03535;
 }
 
-form input.mt-valid,form textarea.mt-valid{
+form input.dw-valid,form textarea.mt-valid{
 	 background: #fff url(../img/icons/valid.png) no-repeat 98% center;
      box-shadow: 0 0 5px #5cd053;
      border-color: #28921f;
@@ -35,8 +35,8 @@ input[type=number]::-webkit-outer-spin-button {
 	margin: 0;
 }
 
-/**mt tooltip css*/
-.mt-tooltip{
+/**dw tooltip css*/
+.dw-tooltip{
 	display:inline-block;
 	position:absolute;
 	bottom: 120%;
@@ -52,7 +52,7 @@ input[type=number]::-webkit-outer-spin-button {
     background:#fff;
     z-index:9999999;
 }
-.mt-tooltip:after{
+.dw-tooltip:after{
 	display:block;
 	content: '';
 	position:absolute;
@@ -72,21 +72,21 @@ input[type=number]::-webkit-outer-spin-button {
 	-o-transform:rotate(-45deg);
 	transform:rotate(-45deg);
 }
-.mt-tooltip-warning{
+.dw-tooltip-warning{
 	border-color:#f89406;
 	/*background-color:#f89406;
 	color:#fff;
 	background-color:rgba(248,148,6,0.8);*/
 }
-.mt-tooltip.mt-tooltip-warning:after{
+.dw-tooltip.mt-tooltip-warning:after{
 	border-left-color: #f89406;
 	border-bottom-color:#f89406;
 }
 
-.mt-tooltip-error{
+.dw-tooltip-error{
 	border-color:#bd362f;
 }
-.mt-tooltip.mt-tooltip-error:after{
+.dw-tooltip.mt-tooltip-error:after{
 	border-left-color: #bd362f;
 	border-bottom-color:#bd362f;
 }
