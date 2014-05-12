@@ -1,0 +1,93 @@
+@charset "UTF-8";
+form span.label{
+	display:inline-block;
+	height:34px;
+	line-height:34px;
+	vertical-align:middle;
+	paddimt-top:0;
+	paddimt-bottom:0;
+	margin:0;
+}
+form input,form textarea{
+	paddimt-right:30px !important;
+}
+form input.mt-required,form textarea.mt-required,
+form input[mt-required],form textarea[mt-required]{
+	background: #fff url(../img/icons/red_asterisk.png) no-repeat 98% center;
+}
+form input.mt-invalid,form textarea.mt-invalid{
+	background: #fff url(../img/icons/invalid.png) no-repeat 98% center;
+    box-shadow: 0 0 5px #d45252;
+    border-color: #b03535;
+}
+
+form input.mt-valid,form textarea.mt-valid{
+	 background: #fff url(../img/icons/valid.png) no-repeat 98% center;
+     box-shadow: 0 0 5px #5cd053;
+     border-color: #28921f;
+}
+/**
+ * Here removing the spin button on the chrome select element
+ * */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/**mt tooltip css*/
+.mt-tooltip{
+	display:inline-block;
+	position:absolute;
+	bottom: 120%;
+	width:50%;
+	left:50%;
+	margin-left:-25%;
+	-moz-border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    padding:5px 10px 5px 10px;
+    border-width:1px;
+    border-style:solid;
+    background:#fff;
+    z-index:9999999;
+}
+.mt-tooltip:after{
+	display:block;
+	content: '';
+	position:absolute;
+	bottom:-3px;
+	left:50%;
+	margin-left:-3px;
+	width:6px;
+	height:6px;
+	border-width:1px;
+	border-style:solid;
+	border-top-color:transparent;
+	border-right-color: transparent;
+	background:#fff;
+	-webkit-transform:rotate(-45deg);
+	-moz-transform:rotate(-45deg);
+	-ms-transform:rotate(-45deg);
+	-o-transform:rotate(-45deg);
+	transform:rotate(-45deg);
+}
+.mt-tooltip-warning{
+	border-color:#f89406;
+	/*background-color:#f89406;
+	color:#fff;
+	background-color:rgba(248,148,6,0.8);*/
+}
+.mt-tooltip.mt-tooltip-warning:after{
+	border-left-color: #f89406;
+	border-bottom-color:#f89406;
+}
+
+.mt-tooltip-error{
+	border-color:#bd362f;
+}
+.mt-tooltip.mt-tooltip-error:after{
+	border-left-color: #bd362f;
+	border-bottom-color:#bd362f;
+}
+
