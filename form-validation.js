@@ -16,13 +16,13 @@
 	//将每一个具有dw属性的html element包装成一个类
 	function DwInputEle(jEle){
 		if((!jEle.is('input')) && (!jEle.is('textarea'))) return;
-		if(!(this instanceof DwInputEle)) return new MtInputEle(jEle);
+		if(!(this instanceof DwInputEle)) return new DwInputEle(jEle);
 		jEle.$dw = this;
 		this.$ele = jEle;
 		this.$form = jEle.parents('form');
 		this.$submitBtn = this.$form.find('input[type=submit]');
 		this.required = typeof jEle.attr('dw-required') != 'undefined';
-		this.regexp = jEle.attr('dw-regexp') ? new RegExp(jEle.attr('mt-regexp')) : undefined;
+		this.regexp = jEle.attr('dw-regexp') ? new RegExp(jEle.attr('dw-regexp')) : undefined;
 		this.emptyTooltip = jEle.attr('placeholder');
 		this.invalidTooltip = jEle.attr('dw-invalid-tooltip');
 		this.init();
@@ -35,14 +35,14 @@
 		var ele = this.$ele;
 		if(this.required){
 			this.$emptyTooltip = $('<div>',{
-				class: 'empty-tooltip dw-tooltip mt-tooltip-warning text-center ms-yahei f-bold',
+				class: 'empty-tooltip dw-tooltip dw-tooltip-warning text-center ms-yahei f-bold',
 				text: this.emptyTooltip
 			}).hide();
 			ele.after(this.$emptyTooltip);
 		}
 		if(this.invalidTooltip){
 			this.$invalidTooltip = $('<div>',{
-				class: 'empty-tooltip dw-tooltip mt-tooltip-error text-center ms-yahei f-bold',
+				class: 'empty-tooltip dw-tooltip dw-tooltip-error text-center ms-yahei f-bold',
 				text: this.invalidTooltip
 			}).hide();
 			ele.after(this.$invalidTooltip);
@@ -61,9 +61,9 @@
 			var flag = typeof me.$ele.attr('dw-invalid-required') != 'undefined'
 					|| typeof me.$ele.attr('dw-invalid-regexp') != 'undefined';
 			if(flag){
-				me.$ele.removeClass('dw-valid').addClass('mt-invalid');
+				me.$ele.removeClass('dw-valid').addClass('dw-invalid');
 			}else
-				me.$ele.removeClass('dw-invalid').addClass('mt-valid');
+				me.$ele.removeClass('dw-invalid').addClass('dw-valid');
 			me.judgeSubmit();
 		});
 		
@@ -96,7 +96,7 @@
 	 */
 	DwInputEle.prototype.judgeSubmit = function(){
 		if (this.$submitBtn.length == 0) return this;
-		var disabled = this.$form.find('[dw-input],.mt-input').toArray().some(function(ele){
+		var disabled = this.$form.find('[dw-input],.dw-input').toArray().some(function(ele){
 			var jEle = $(ele);
 			return jEle.hasClass('dw-invalid');
 		});
@@ -107,7 +107,7 @@
 	
 	
 	$(document).ready(function(){
-		$('[dw-input],.mt-input').each(function(){
+		$('[dw-input],.dw-input').each(function(){
 			DwInputEle($(this));
 		});
 	});

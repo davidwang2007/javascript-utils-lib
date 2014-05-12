@@ -11,17 +11,17 @@ form span.label{
 form input,form textarea{
 	paddidw-right:30px !important;
 }
-form input.dw-required,form textarea.mt-required,
-form input[dw-required],form textarea[mt-required]{
+form input.dw-required,form textarea.dw-required,
+form input[dw-required],form textarea[dw-required]{
 	background: #fff url(../img/icons/red_asterisk.png) no-repeat 98% center;
 }
-form input.dw-invalid,form textarea.mt-invalid{
+form input.dw-invalid,form textarea.dw-invalid{
 	background: #fff url(../img/icons/invalid.png) no-repeat 98% center;
     box-shadow: 0 0 5px #d45252;
     border-color: #b03535;
 }
 
-form input.dw-valid,form textarea.mt-valid{
+form input.dw-valid,form textarea.dw-valid{
 	 background: #fff url(../img/icons/valid.png) no-repeat 98% center;
      box-shadow: 0 0 5px #5cd053;
      border-color: #28921f;
@@ -78,7 +78,7 @@ input[type=number]::-webkit-outer-spin-button {
 	color:#fff;
 	background-color:rgba(248,148,6,0.8);*/
 }
-.dw-tooltip.mt-tooltip-warning:after{
+.dw-tooltip.dw-tooltip-warning:after{
 	border-left-color: #f89406;
 	border-bottom-color:#f89406;
 }
@@ -86,7 +86,7 @@ input[type=number]::-webkit-outer-spin-button {
 .dw-tooltip-error{
 	border-color:#bd362f;
 }
-.dw-tooltip.mt-tooltip-error:after{
+.dw-tooltip.dw-tooltip-error:after{
 	border-left-color: #bd362f;
 	border-bottom-color:#bd362f;
 }
